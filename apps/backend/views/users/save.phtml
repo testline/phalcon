@@ -1,0 +1,49 @@
+<? ob_start(); ?>
+
+<div class="widget">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i></h4>
+    </div>
+    <div class="widget-body form">
+        <?= $form->start() ?>
+        <div class="control-group">
+            <label class="control-label" for="<?= $form->form_id ?>_firstname">Имя</label>
+            <div class="controls">
+                <?= $form->d('firstname') ?>
+                <?= $form->dE('firstname') ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="<?= $form->form_id ?>_lastname">Фамилия</label>
+            <div class="controls">
+                <?= $form->d('lastname') ?>
+                <?= $form->dE('lastname') ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="<?= $form->form_id ?>_login">Логин</label>
+            <div class="controls">
+                <?= $form->d('login') ?>
+                <?= $form->dE('login') ?>
+            </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Сохранить" class="btn btn-success">
+        </div>
+        <?= $form->end() ?>
+    </div>
+</div>
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление пользователя' : 'Редактирование пользователя',
+    'breadCrumbs' => array(
+        'Пользователи' => '#users',
+        $create ? 'Добавление пользователя' : 'Редактирование пользователя' => '',
+    ),
+)));
+?>
