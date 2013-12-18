@@ -1,0 +1,78 @@
+<? ob_start(); ?>
+
+<? foreach ($usersGroups as $userGroup) { ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <?= $userGroup['group']->name ?>
+                        <button class="tableHeadButton btn btn-danger btn-sm deleteUserGroup" data-userGroupId="<?= $userGroup['group']->id ?>"><i class="glyphicon glyphicon-trash"></i><span>Удалить группу</span></button>
+                        <a href="#usersgroups/edit/<?= $userGroup['group']->id ?>" class="tableHeadButton btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span>Редактировать группу</a>
+                        <a href="#users/create/<?= $userGroup['group']->id ?>" class="tableHeadButton btn btn-success btn-sm"><i class="glyphicon glyphicon-plus"></i>Добавить пользователя</a>
+                    </h4>
+                </div>
+                <table id="dt_basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Имя</th>
+                            <th>Фамилия</th>
+                            <th>Логин</th>
+                            <th>Статус</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <? foreach ($userGroup['users'] as $k => $v) { ?>
+                            <tr>
+                                <td><?= $k + 1 ?></td>
+                                <td><?= $v->firstname ?></td>
+                                <td><?= $v->lastname ?></td>
+                                <td><?= $v->login ?></td>
+                                <td><span class="label label-<?= $v->active ? 'success' : 'danger' ?>"><?= $v->active ? 'Активен' : 'Блокирован' ?></span></td>
+                                <td>
+                                    <a href="#users/edit/<?= $v->id ?>" class="btn_ _mini _purple"><i class="icon-pencil"></i> Редактировать</a>&nbsp;
+                                    <span class="deleteUser spanLikeLink" data-userId="<?= $v->id ?>"><i class="icon-remove"></i> Удалить</span>
+                                </td>
+                            </tr>
+                        <? } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<? } ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.deleteUser').click(function(event) {
+            var userId = $(this).attr('data-userId');
+            confirmDialog('Удалить пользователя?', {text : "Удалить", click :function() {
+                    deleteAction('users', [userId])
+            }});
+        });
+        $('.deleteUserGroup').click(function(event) {
+            var userGroupId = $(this).attr('data-userGroupId');
+            confirmDialog('Удалить группу со всеми её пользователями?', {text : "Удалить", click :function() {
+                    deleteAction('usersgroups', [userGroupId])
+            }});
+        });
+    });
+</script>
+
+<a href="#users-groups/create" class="btn btn-success buttonWithMarginTop"><i class="glyphicon glyphicon-plus"></i>Добавить группу пользователей</a>
+
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => 'Пользователи',
+    'breadCrumbs' => array(
+        array('title'=> 'Пользователи', 'url' => ''),
+    ),
+)));
+?>

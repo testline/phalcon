@@ -1,0 +1,78 @@
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus, .form-control:focus {border-color:#1abc9c}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus,.panel-footer .pagination > li.active > a {border-color:#1abc9c;background:#1abc9c;color:#fff}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {background:#1abc9c;color:#fff}
+
+/* navigation */
+	.side_text_nav > li > a:hover,.side_text_nav > .parent_active > a {background:#1abc9c}
+	.side_text_nav li.link_active > a:before {background:#1abc9c}
+
+	.top_ico_nav li a:hover,.top_ico_nav li.active a,.top_text_nav > li > a:hover,.top_text_nav > .active > a {background:#1abc9c;color:#fff}
+	.top_text_nav ul,.top_text_nav ul ul {border-color:#1abc9c}
+
+	.side_ico_nav li a:hover,.side_ico_nav li.active a {border-left: 3px solid #1abc9c}
+	
+	.sidebar_right .side_ico_nav li a:hover,.sidebar_right .side_ico_nav li.active a {border-right: 3px solid #1abc9c}
+
+	body.side_fixed_open #text_nav_side_fixed .parent_active > a {background:#1abc9c !important;color:#fff}
+
+/* typeahead */
+	.tt-suggestion.tt-is-under-cursor {background:#1abc9c}
+
+/* tabs */
+	.tabbable-bordered .nav-tabs > li.active > a,.nav-tabs > li.active > a { -webkit-box-shadow: 0 -2px 0 #1abc9c;-moz-box-shadow: 0 -2px 0 #1abc9c;box-shadow: 0 -2px 0 #1abc9c; }
+	.tabs-below.tabbable-bordered .nav-tabs > li.active > a { -webkit-box-shadow: 0 2px 0 #1abc9c;-moz-box-shadow: 0 2px 0 #1abc9c;box-shadow: 0 2px 0 #1abc9c; }
+	.tabs-left.tabbable-bordered .nav-tabs > li.active > a { -webkit-box-shadow: -2px 0 0 #1abc9c;-moz-box-shadow: -2px 0 0 #1abc9c;box-shadow: -2px 0 0 #1abc9c; }
+	.tabs-right.tabbable-bordered .nav-tabs > li.active > a { -webkit-box-shadow: 2px 0 0 #1abc9c;-moz-box-shadow: 2px 0 0 #1abc9c;box-shadow: 2px 0 0 #1abc9c; }
+
+/* fullcalendar */
+	.fc-header-left > span.fc-state-active {background:#1abc9c}
+
+/* 2col muliselect */
+	.ms-container .ms-list.ms-focus{border-color:#1abc9c}
+	.ms-container .ms-selectable li.ms-hover, .ms-container .ms-selection li.ms-hover {background:#1abc9c}
+
+/* select 2 */
+	.select2-results .select2-highlighted {background:#1abc9c}
+
+/* datepicker */
+	.datepicker table tr td.active,.datepicker table tr td.active:hover,.datepicker table tr td.active.disabled,.datepicker table tr td.active.disabled:hover,.datepicker table tr td span.active,.datepicker table tr td span.active:hover,.datepicker table tr td span.active.disabled,.datepicker table tr td span.active.disabled:hover {background:#1abc9c;border-color: #1abc9c;border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);}
+	.datepicker table tr td.active:hover,.datepicker table tr td.active:hover:hover,.datepicker table tr td.active.disabled:hover,.datepicker table tr td.active.disabled:hover:hover,.datepicker table tr td.active:active,.datepicker table tr td.active:hover:active,.datepicker table tr td.active.disabled:active,.datepicker table tr td.active.disabled:hover:active,.datepicker table tr td.active.active,.datepicker table tr td.active:hover.active,.datepicker table tr td.active.disabled.active,.datepicker table tr td.active.disabled:hover.active,.datepicker table tr td.active.disabled,.datepicker table tr td.active:hover.disabled,.datepicker table tr td.active.disabled.disabled,.datepicker table tr td.active.disabled:hover.disabled,.datepicker table tr td.active[disabled],.datepicker table tr td.active:hover[disabled],.datepicker table tr td.active.disabled[disabled],.datepicker table tr td.active.disabled:hover[disabled],.datepicker table tr td.active:active,.datepicker table tr td.active:hover:active,.datepicker table tr td.active.disabled:active,.datepicker table tr td.active.disabled:hover:active,.datepicker table tr td.active.active,.datepicker table tr td.active:hover.active,.datepicker table tr td.active.disabled.active,.datepicker table tr td.active.disabled:hover.active,.datepicker table tr td span.active,.datepicker table tr td span.active:hover,.datepicker table tr td span.active.disabled,.datepicker table tr td span.active.disabled:hover,.datepicker table tr td span.active:hover,.datepicker table tr td span.active:hover:hover,.datepicker table tr td span.active.disabled:hover,.datepicker table tr td span.active.disabled:hover:hover,.datepicker table tr td span.active:active,.datepicker table tr td span.active:hover:active,.datepicker table tr td span.active.disabled:active,.datepicker table tr td span.active.disabled:hover:active,.datepicker table tr td span.active.active,.datepicker table tr td span.active:hover.active,.datepicker table tr td span.active.disabled.active,.datepicker table tr td span.active.disabled:hover.active,.datepicker table tr td span.active.disabled,.datepicker table tr td span.active:hover.disabled,.datepicker table tr td span.active.disabled.disabled,.datepicker table tr td span.active.disabled:hover.disabled,.datepicker table tr td span.active[disabled],.datepicker table tr td span.active:hover[disabled],.datepicker table tr td span.active.disabled[disabled],.datepicker table tr td span.active.disabled:hover[disabled],.datepicker table tr td span.active:active,.datepicker table tr td span.active:hover:active,.datepicker table tr td span.active.disabled:active,.datepicker table tr td span.active.disabled:hover:active,.datepicker table tr td span.active.active,.datepicker table tr td span.active:hover.active,.datepicker table tr td span.active.disabled.active,.datepicker table tr td span.active.disabled:hover.active {background:#1abc9c}
+
+/* switch toggles */
+	.has-switch.switch-theme span.switch-primary, .has-switch.switch-theme span.switch-left {background:#1abc9c}
+	
+/* sliders */
+	.irs-diapason,.noUi-origin-lower {background:#1abc9c}
+	
+/* wizard */
+	.wizard > .steps .current .number {background:#1abc9c;border-color:#1abc9c;color:#fff}
+	.wizard > .steps .done .number {border-color:#1abc9c}
+
+/* gallery */
+	.lay_active {color:#1abc9c}
+	
+/* slick grid */
+	.slick-pager .slick-pager-nav .slick-item-nav:hover {border-color:#1abc9c;background:#1abc9c}
+	.slick-pager .slick-pager-nav .slick-item-nav:hover i {color:#fff}
+	
+/* faq/help */
+	.link_boxed_icon,a:hover .link_boxed_icon {color:#1abc9c}
+
+/* invoice */
+	.invoice_heading {background:#1abc9c}
+	.invoice_table > thead > tr > th {border-color:#1abc9c}
+
+/* user profile */
+	.user_heading .user_actions a:hover {border-color:#1abc9c;background:#1abc9c;color:#fff}
+	
+/* mailbox */
+	.mailbox_content .mbox_star span.icon-star {color:#1abc9c}
+	
+/* onepage Scroll */
+	.landing_page nav .p_active a,.owl-prev:hover,.owl-next:hover {background:#1abc9c}
+	.grid_filters .filter:hover,.grid_filters .filter.active {color:#1abc9c}
+	
+/* pricing table */
+.pricing_panel_feat .pricing_heading {color:#1abc9c}

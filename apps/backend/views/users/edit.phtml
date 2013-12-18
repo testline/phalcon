@@ -1,0 +1,33 @@
+<? ob_start(); ?>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title"><?= $group->name ?></h4>
+    </div>
+    <div class="panel-body">
+        <?= $form->start() ?>
+        <?= $form->render('login', 'Логин')  ?>
+        <?= $form->render('password', 'Пароль')  ?>
+        <?= $form->render('cpassword', 'Подтверждение пароля')  ?>
+        <?= $form->render('firstname', 'Имя')  ?>
+        <?= $form->render('lastname', 'Фамилия')  ?>
+        <?= $form->render('active', 'Активен')  ?>
+        <?= $form->showSubmitButton()  ?>
+        <?= $form->end() ?>
+    </div>
+</div>
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление пользователя' : 'Редактирование пользователя',
+    'breadCrumbs' => array(
+        array('title'=> 'Пользователи', 'url' => '#users'),
+        array('title'=> $create ? 'Добавление пользователя' : 'Редактирование пользователя', 'url' => ''),
+    ),
+)));
+?>

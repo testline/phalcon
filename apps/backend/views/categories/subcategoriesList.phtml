@@ -1,0 +1,51 @@
+<? if (sizeof($subcategories)) { ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Подкатегории товаров
+                    </h4>
+                </div>
+                <table id="dt_basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Название RU</th>
+                            <th>Название UA</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <? foreach ($subcategories as $k => $v) { ?>
+                                <tr>
+                                    <td><?= $k + 1 ?></td>
+                                    <td><?= $v->name_ru ?></td>
+                                    <td><?= $v->name_ua ?></td>
+                                    <td>
+                                        <a href="#categories/edit/<?= $v->id ?>" class="btn_ _mini _purple"><i class="icon-pencil"></i> Редактировать</a>&nbsp;
+                                        <span class="deleteCategory spanLikeLink" data-categoryId="<?= $v->id ?>"><i class="icon-remove"></i> Удалить</span>
+                                    </td>
+                                </tr>
+                            <? } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.deleteCategory').click(function(event) {
+                var id = $(this).attr('data-categoryId');
+                confirmDialog('Удалить категорию?', {text : "Удалить", click :function() {
+                        deleteAction('categories', [id])
+                }});
+            });
+        });
+    </script>
+<? } ?>
+
+<? if (!$create) { ?>
+    <a href="#categories/create/<?= $category->id ?>" class="btn btn-success buttonWithMarginTop"><i class="glyphicon glyphicon-plus"></i>Добавить подкатегорию товаров</a>
+<? } ?>
