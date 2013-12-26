@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title"><?= $title ?></h4>
+    </div>
+
+    <? if (sizeof ($items)) { ?>
+        <table id="dt_basic" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <? foreach ($fields as $name) { ?>
+                        <th><?= $name ?></th>
+                    <? } ?>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <? foreach ($items as $k => $v) { ?>
+                    <tr>
+                        <td><?= $k + 1 ?></td>
+                        <? foreach ($fields as $shortname => $name) { ?>
+                            <td>
+                                <? if ($booleanFields && in_array($shortname, $booleanFields)) { ?>
+                                    <?= $v->{$shortname} ? 'Да' : 'Нет' ?>
+                                <? } else { ?>
+                                    <?= $v->{$shortname} ?>
+                                <? } ?>
+                            </td>
+                        <? } ?>
+                        <td>
+                            <?= $this->tag->editButtonInTable($controller, $v->id) ?>
+                            <? if (!$dontShowDeleteButton) { ?>
+                                <?= $this->tag->deleteButtonInTable($controller, $v->id, $deleteOneConfirmationMessage ? $deleteOneConfirmationMessage : '') ?>
+                            <? } ?>
+                        </td>
+                    </tr>
+                <? } ?>
+            </tbody>
+        </table>
+    <? } ?>
+</div>

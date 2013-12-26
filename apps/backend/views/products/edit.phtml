@@ -1,0 +1,60 @@
+<? ob_start(); ?>
+
+<?= $this->tag->formBlockStart($create ? 'Добавление товара' : 'Редактирование товара') ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('code', 'Артикул') ?>
+    <?= $form->render('name_r2', 'Наименование R2') ?>
+    <?= $form->render('name_original', 'Наименование оригинальное') ?>
+    <?= $form->render('name_ru', 'Наименование RU') ?>
+    <?= $form->render('name_ua', 'Наименование UA') ?>
+    <?= $form->render('price', 'Цена') ?>
+    <?= $form->render('weight', 'Вес') ?>
+    <?= $form->render('length', 'Длина') ?>
+    <?= $form->render('width', 'Ширина') ?>
+    <?= $form->render('height', 'Толщина (высота)') ?>
+
+    <?= $form->render('short_description', 'Короткое описание') ?>
+    <?= $form->render('long_description', 'Описание ') ?>
+
+
+    <?= $form->render('brands_id', 'Бренды') ?>
+    <?//= $form->render('collections_id', '') ?>
+    <?= $form->render('measures_id', 'Единица измерения') ?>
+    <?= $form->render('colors_id', 'Цвет') ?>
+    <?= $form->render('materials_id', 'Материал') ?>
+    <?= $form->render('surfaces_id', 'Поверхность') ?>
+    <?= $form->render('appliances_id', 'Применение') ?>
+    <?= $form->render('styles_id', 'Стиль') ?>
+    <?= $form->render('forms_id', 'Форма') ?>
+    <?= $form->render('installments_id', 'Установка') ?>
+    <?= $form->render('sets_id', 'Комплектация') ?>
+
+
+    <?//= $form->render('', '') ?>
+    <?= $form->showSubmitButton() ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+<script type="text/javascript">
+    treeProducts.selectNode(treeProducts.getNodeByParam("url", '#products/index/<?= $categoryId ?>', null));
+</script>
+
+
+
+<?
+$breadCrumbs[] = array('title'=> 'Каталог товаров', 'url' => '#');
+$breadCrumbs = array_merge($breadCrumbs, Admin\Backend\Models\Categories::getBreadCrumbs($categoryId, 'For Product'));
+if ($create)
+    $breadCrumbs[] = array('title'=> 'Добавление товара', 'url' => '');
+else $breadCrumbs[] = array('title'=> $product->name_ru, 'url' => '');
+
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление товара' : 'Редактирование товара',
+    'breadCrumbs' => $breadCrumbs,
+)));
+?>

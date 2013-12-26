@@ -1,0 +1,47 @@
+<? ob_start(); ?>
+
+<?= $this->tag->formBlockStart($create ? 'Добавление категории' : 'Редактирование категории') ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('name_ru', 'Название RU') ?>
+    <?= $form->render('name_ua', 'Название UA') ?>
+    <?= $form->showSubmitButton() ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+
+
+
+<? if ($edit && $category->level == 0)
+    $this->partial("characteristics/characteristicsList", array($category)) ?>
+
+
+
+<? if ($edit && $showSubcategoriesBlock)
+    $this->partial("categories/subcategoriesList") ?>
+
+
+<? if ($create && $parentCategory) { ?>
+    <script type="text/javascript">
+        treeCategories.selectNode(treeCategories.getNodeByParam("url", '#categories/edit/<?= $parentCategory->id ?>', null));
+    </script>
+<? } ?>
+
+
+<?
+$breadCrumbs[] = array('title'=> 'Категории товаров', 'url' => '#categories');
+if ($parentCategory)
+   $breadCrumbs = array_merge($breadCrumbs, Admin\Backend\Models\Categories::getBreadCrumbs($parentCategory->id, 'For Category'));
+if ($edit)
+    $breadCrumbs[] = array('title'=> $category->name_ru, 'url' => '');
+else $breadCrumbs[] = array('title'=> 'Добавление категории', 'url' => '');
+
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление категории' : 'Редактирование категории',
+    'breadCrumbs' => $breadCrumbs,
+)));
+?>

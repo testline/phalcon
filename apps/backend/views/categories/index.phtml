@@ -1,0 +1,26 @@
+<? ob_start(); ?>
+
+<? $this->partial("partials/simpleTable", array(
+    'title' => 'Категории товаров',
+    'controller' => 'categories',
+    'items' => $categories,
+    'fields' => array(
+        'name_ru' => 'Название RU',
+        'name_ua' => 'Название UA',
+    ),
+    'deleteOneConfirmationMessage' => 'category',
+)) ?>
+
+<?= $this->tag->addButton("#categories/create/0", 'Добавить категорию')  ?>
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => 'Категории товаров',
+    'breadCrumbs' => array(
+        array('title'=> 'Категории товаров', 'url' => ''),
+    )
+)));
+?>

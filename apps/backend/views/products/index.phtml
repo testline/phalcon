@@ -1,0 +1,39 @@
+<? ob_start(); ?>
+
+
+<? $this->partial("partials/simpleTable", array(
+    'title' => 'Товары',
+    'controller' => 'products',
+    'items' => $products,
+    'fields' => array(
+        'name_ru' => 'Название RU',
+        'name_ua' => 'Название UA',
+    ),
+    'dontShowDeleteButton' => true,
+)) ?>
+
+<? if ($categoryId) { ?>
+    <?= $this->tag->addButton("#products/create/$categoryId", 'Добавить товар')  ?>
+<? } ?>
+
+
+<?
+if ($categoryId) {
+    $breadCrumbs[] = array('title'=> 'Каталог товаров', 'url' => '#products');
+    $categoriesBreadCrumbs = Admin\Backend\Models\Categories::getBreadCrumbs($categoryId, 'For Product');
+    // Unset last categories url
+    if ($categoriesBreadCrumbs)
+        $categoriesBreadCrumbs[sizeof($categoriesBreadCrumbs) - 1]['url'] = '';
+    $breadCrumbs = array_merge($breadCrumbs, $categoriesBreadCrumbs);
+} else {
+    $breadCrumbs[] = array('title'=> 'Каталог товаров', 'url' => '');
+}
+
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => 'Товары',
+    'breadCrumbs' => $breadCrumbs
+)));
+?>

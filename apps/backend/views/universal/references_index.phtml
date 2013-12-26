@@ -1,0 +1,23 @@
+<? ob_start(); ?>
+
+<? $this->partial("partials/simpleTable", array(
+    'title' => $title,
+    'controller' => $controller,
+    'items' => $items,
+    'fields' => array(
+        'name' => 'Название',
+    ),
+)) ?>
+
+<?= $this->tag->addButton("#$controller/create", $createButtonTitle)  ?>
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $title,
+    'breadCrumbs' => $breadCrumbs
+)));
+?>

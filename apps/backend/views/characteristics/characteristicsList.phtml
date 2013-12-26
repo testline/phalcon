@@ -1,0 +1,19 @@
+<?
+$characteristics = \Admin\Backend\Models\Characteristics::find("categories_id = $category->id");
+?>
+
+<? $this->partial("partials/simpleTable", array(
+    'title' => 'Характеристики товаров',
+    'controller' => 'characteristics',
+    'items' => $characteristics,
+    'fields' => array(
+        'name' => 'Название',
+        'type' => 'Тип',
+        'required' => 'Обязательная',
+    ),
+    'booleanFields' => array('required'),
+)) ?>
+
+<?= $this->tag->addButton("#characteristics/create/$category->id", 'Добавить характеристику')  ?>
+
+<br><br><br><br>

@@ -1,0 +1,15 @@
+<? if (sizeof($subcategories)) { ?>
+    <? $this->partial("partials/simpleTable", array(
+        'title' => 'Подкатегории товаров',
+        'controller' => 'categories',
+        'items' => $subcategories,
+        'fields' => array(
+            'name_ru' => 'Название RU',
+            'name_ua' => 'Название UA',
+        ),
+        'deleteOneConfirmationMessage' => 'category',
+    )) ?>
+<? } ?>
+<? if (!$create) { ?>
+    <?= $this->tag->addButton("#categories/create/$category->id", 'Добавить подкатегорию товаров')  ?>
+<? } ?>

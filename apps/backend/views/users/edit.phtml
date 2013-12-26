@@ -1,0 +1,29 @@
+<? ob_start(); ?>
+
+<?= $this->tag->formBlockStart($group->name) ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('login', 'Логин')  ?>
+    <?= $form->render('password', 'Пароль')  ?>
+    <?= $form->render('cpassword', 'Подтверждение пароля')  ?>
+    <?= $form->render('firstname', 'Имя')  ?>
+    <?= $form->render('lastname', 'Фамилия')  ?>
+    <?= $form->render('active', 'Активен')  ?>
+    <?= $form->showSubmitButton()  ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление пользователя' : 'Редактирование пользователя',
+    'breadCrumbs' => array(
+        array('title'=> 'Пользователи', 'url' => '#users'),
+        array('title'=> $create ? 'Добавление пользователя' : 'Редактирование пользователя', 'url' => ''),
+    ),
+)));
+?>

@@ -1,0 +1,109 @@
+<? ob_start(); ?>
+
+<?= $this->tag->formBlockStart($create ? 'Добавление характеристики' : 'Редактирование характеристики') ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('name', 'Название') ?>
+    <?= $form->render('type', 'Тип') ?>
+
+
+    <div class="form-group" id="listValuesGroup" <? if (!in_array($characteristic->type, array('select', 'radioboxes'))) { ?>style="display:none;"<? } ?>>
+        <label class="col-sm-2 control-label">Значения</label>
+        <div id="listValues" class="col-sm-10 input-group date ebro_datepicker">
+            <? if ($listValues) { ?>
+                <? foreach ($listValues as $k => $v) { ?>
+                    <div><input class="form-control listValuesExisting" type="text" name="listValue_<?= $v->id ?>" value="<?= $v->value ?>" /><span class="input-group-addon deleteListValue"><i class="icon-trash"></i></span></div>
+                <? } ?>
+            <? } ?>
+        <button id="addListValue" type="button" class="btn btn-default btn-sm"><i class="icon-plus"></i>&nbsp;&nbsp; Добавить значение</button>
+        </div>
+    </div>
+    <input type="hidden" name="listValuesToDelete" value="" />
+
+    <?= $form->render('required', 'Обязательно заполнить') ?>
+    <?= $form->showSubmitButton() ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+<div id="listValuePrototype" style="display:none;">
+    <div><input class="form-control" type="text" name="newListValues[]" value="" /><span class="input-group-addon deleteListValue"><i class="icon-trash"></i></span></div>
+</div>
+
+<script type="text/javascript">
+    treeCategories.selectNode(treeCategories.getNodeByParam("url", '#categories/edit/<?= $category->id ?>', null));
+
+    $('#addListValue').click(function(event) {
+        $('#addListValue').before($('#listValuePrototype').html());
+    });
+
+    $('#listValues').on('click', '.deleteListValue', function(event) {
+        var listField = $(this).prev();
+        listField.attr('disabled', !listField.attr('disabled'));
+    });
+
+    $('#characteristicForm_type').change(function(event) {
+        if ($(this).val() == 'select' || $(this).val() == 'radioboxes')
+            $('#listValuesGroup').slideDown();
+        else $('#listValuesGroup').slideUp();
+    });
+
+    function beforeSubmit<?= $form->form_id?>Handler(parameters) {
+        var submit = true;
+        if ($('#characteristicForm_type').val() == 'select' || $('#characteristicForm_type').val() == 'radioboxes') {
+            $('#listValues input:enabled').each(function(i, obj) {
+                if (obj.value == '') {
+                    $(obj).addClass('error');
+                    submit = false;
+                }
+            });
+            if (submit) {
+                // Send values to delete
+                var idsToDelete = [];
+                $('.listValuesExisting:disabled').each(function(i, obj) {
+                    idsToDelete.push($(obj).attr('name').substring(10));
+                });
+                for (var k in parameters)
+                    if (parameters[k]['name'] == 'listValuesToDelete')
+                        break;
+                parameters[k]['value'] = idsToDelete.join(',');
+            }
+        }
+        return submit;
+    }
+</script>
+<style>
+    #listValues .form-control {
+        display: inline-block!important;
+        margin-bottom: 10px;
+        width: 300px;
+    }
+    #listValues .input-group-addon {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        margin-top: -9px;
+        padding-top: 8px;
+    }
+    .deleteListValue {
+        cursor: pointer;
+    }
+</style>
+
+
+
+<?
+$breadCrumbs[] = array('title'=> 'Категории товаров', 'url' => '#categories');
+$breadCrumbs = array_merge($breadCrumbs, Admin\Backend\Models\Categories::getBreadCrumbs($category->id, 'For Category'));
+if ($edit)
+    $breadCrumbs[] = array('title'=> $characteristic->name, 'url' => '');
+else $breadCrumbs[] = array('title'=> 'Добавление характеристики', 'url' => '');
+
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $create ? 'Добавление характеристики' : 'Редактирование характеристики',
+    'breadCrumbs' => $breadCrumbs,
+)));
+?>
