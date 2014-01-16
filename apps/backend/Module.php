@@ -25,12 +25,14 @@ class Module
 	public function registerServices($di)
 	{
 		//Registering a dispatcher
-		$di->set('dispatcher', function() {
+		$di->set('dispatcher', function() use ($di) {
 			$dispatcher = new \Phalcon\Mvc\Dispatcher();
 
 			//Attach a event listener to the dispatcher
 			$eventManager = new \Phalcon\Events\Manager();
-			$eventManager->attach('dispatch', new \Acl('backend'));
+			//$eventManager->attach('dispatch', new \Acl('backend'));
+                        $eventManager->attach('dispatch', new Plugins\Security($di));
+
                         $eventManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
                             //Handle 404 exceptions
                             if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception) {
