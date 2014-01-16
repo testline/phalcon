@@ -11,4 +11,6 @@ class Users extends \Phalcon\Mvc\Model {
     public $firstname;
     public $lastname;
     public $active;
+
+    
 }

@@ -88,9 +88,13 @@ function locationHashChanged() {
     $('.submenu_section a').removeClass('active');
     secondLevelNewActiveLink.addClass('active');
 
+    // Highlight block in header
+    $('#icon_nav_h li').removeClass('active');
+    $('#icon_nav_h a[href="#' + controller + '"], #icon_nav_h a[data-highlightOn~="#' + controller + '"]').parent().addClass('active');
 
 
-    // Highlite current node in trees
+
+    // Highlight current node in trees
     treeProducts.cancelSelectedNode();
     treeCategories.cancelSelectedNode();
     var selectedNode = treeProducts.getNodeByParam("url", '#' + hash, null);
@@ -136,8 +140,7 @@ $(document).ready(function() {
     initializeTree('Products', treeNodesProducts);
     initializeTree('Categories', treeNodesCategories);
 
-    if (location.hash != '')
-        locationHashChanged();
+    locationHashChanged();
 
     $('body').on('click', '.deleteItem', function(event) {
         var itemId = $(this).attr('data-itemId');

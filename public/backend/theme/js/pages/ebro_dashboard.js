@@ -1,30 +1,30 @@
 /* [ ---- Ebro Admin - dashboard 1 ---- ] */
 
-	$(function() {
-		//* small charts
-		ebro_peity.init();
-		//* easy pie charts
-		ebro_easy_pie.init();
-		//* vector map
-		ebro_vector_map.init();
-		//* charts
-		ebro_charts.browsers();
-		ebro_charts.social();
-		ebro_charts.overview();
-		//* video embed
-		ebro_video.init();
-		//* photo carousel
-		ebro_carousel.init();
-		//* calendar
-		ebro_calendar.init();
-	});
-	
+//	$(function() {
+//		//* small charts
+//		ebro_peity.init();
+//		//* easy pie charts
+//		ebro_easy_pie.init();
+//		//* vector map
+//		ebro_vector_map.init();
+//		//* charts
+//		ebro_charts.browsers();
+//		ebro_charts.social();
+//		ebro_charts.overview();
+//		//* video embed
+//		ebro_video.init();
+//		//* photo carousel
+//		ebro_carousel.init();
+//		//* calendar
+//		ebro_calendar.init();
+//	});
+
 	//* small charts
 	ebro_peity = {
 		init: function() {
 			if($.fn.peity) {
 				if(jQuery.browser.msie) devicePixelRatio = 1;
-				
+
 				//* bars
 				$.fn.peity.defaults.bar = {
 					delimiter: ",",
@@ -40,7 +40,7 @@
 						colours: ["#6cc334"]
 					});
 				}
-				
+
 				if($('.peity_bar_down').length) {
 					$(".peity_bar_down").peity("bar",{
 						colours: ['#e11b28']
@@ -49,7 +49,7 @@
 			}
 		}
 	}
-	
+
 	//* easy pie charts
 	ebro_easy_pie = {
 		init: function() {
@@ -73,7 +73,7 @@
 			}
 		}
 	}
-	
+
 	//* vector map
 	ebro_vector_map = {
 		init: function() {
@@ -105,29 +105,29 @@
 						}
 					}
 				});
-			}   
+			}
 		}
 	}
-	
+
 	//* charts
 	ebro_charts = {
 		browsers: function() {
 			if($('#flot_social').length) {
-				
+
 				function labelFormatter(label, series) {
 					return '<div class="flot_label">' + label +'</div>';
 				}
-				
+
 				$.plot('#flot_browsers', data_browsers, {
 					series: {
-						pie: { 
+						pie: {
 							show: true,
 							radius: 1,
 							label: {
 								show: true,
 								radius: 3/4,
 								formatter: labelFormatter,
-								background: { 
+								background: {
 									opacity: 0.5,
 									color: '#000'
 								}
@@ -140,7 +140,7 @@
 					},
 					colors: ["#7baf42","#efa91f","#f04b51","#0892cd","#b1b1b1"]
 				});
-				
+
 			}
 		},
 		social : function() {
@@ -155,7 +155,7 @@
 
 				var options = {
 					grid: {
-						clickable: true, 
+						clickable: true,
 						hoverable: true,
 						autoHighlight: true,
 						backgroundColor: null,
@@ -207,15 +207,15 @@
 					label: "Twitter",
 					data:data_twitter,
 					points: {fillColor: '#fff'}
-				}, {	
+				}, {
 					label: "Google+",
 					data:data_google,
 					points: {fillColor: '#fff'}
-				}, {	
+				}, {
 					label: "LinkedIn",
 					data:data_linkedin,
 					points: {fillColor: '#fff'}
-				}, {	
+				}, {
 					label: "Facebook",
 					data:data_facebook,
 					points: {fillColor: '#fff'}
@@ -228,10 +228,10 @@
 
 				// add 2h to match utc+2
 				for (var i = 0; i < data_new_visits.length; ++i) {data_new_visits[i][0] += 60 * 120 * 1000};
-			   
+
 				var options = {
 					grid: {
-						clickable: true, 
+						clickable: true,
 						hoverable: true,
 						autoHighlight: true,
 						backgroundColor: null,
@@ -289,7 +289,7 @@
 			}
 		}
 	}
-	
+
 	//* video embed
 	ebro_video = {
 		init: function() {
@@ -298,12 +298,12 @@
 			}
 		}
 	}
-	
+
 	//* photo carousel
 	ebro_carousel = {
 		init: function() {
 			if ($('.photo-carousel').length) {
-				
+
 				$(".photo-carousel").owlCarousel({
 					navigation : true,
 					navigationText: ["<span class=\"glyphicon glyphicon-chevron-left\"></span>","<span class=\"glyphicon glyphicon-chevron-right\"></span>"],
@@ -311,8 +311,8 @@
 					itemsDesktop : [1199,3],
 					itemsDesktopSmall : [979,3]
 				});
-				 
-				$(".photo-carousel").find('.gal_lightbox').magnificPopup({ 
+
+				$(".photo-carousel").find('.gal_lightbox').magnificPopup({
 					type: 'image',
 					gallery: {
 						enabled: true,
@@ -330,12 +330,12 @@
 					retina: {
 						ratio: 2
 					}
-					
+
 				});
 			}
 		}
 	}
-	
+
 	//*  calendar
 	ebro_calendar = {
 		init: function() {
@@ -344,7 +344,7 @@
 				var d = date.getDate();
 				var m = date.getMonth();
 				var y = date.getFullYear();
-				
+
 				$('#ebro_cal').fullCalendar({
 					header: {
 						center: 'prev title next',
@@ -404,5 +404,24 @@
 					]
 				});
 			}
-		}	
+		}
 	}
+
+        $(function() {
+		//* small charts
+		ebro_peity.init();
+		//* easy pie charts
+		ebro_easy_pie.init();
+		//* vector map
+		ebro_vector_map.init();
+		//* charts
+		ebro_charts.browsers();
+		ebro_charts.social();
+		ebro_charts.overview();
+		//* video embed
+		ebro_video.init();
+		//* photo carousel
+		ebro_carousel.init();
+		//* calendar
+		ebro_calendar.init();
+	});

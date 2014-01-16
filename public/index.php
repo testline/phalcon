@@ -85,20 +85,6 @@ class Application extends \Phalcon\Mvc\Application
                                 "params"     => 3,
 			));
 
-                        // Products
-//                        $router->add("/admin/products/:params", array(
-//				'module' => 'backend',
-//				'controller' => 'products',
-//				'action' => 'index',
-//                                "params"=> 1,
-//			));
-//                        $router->add("/admin/products/:params", array(
-//				'module' => 'backend',
-//				'controller' => 'products',
-//				'action' => 'index',
-//                                "params"=> 1,
-//			));
-
 			return $router;
 		});
 

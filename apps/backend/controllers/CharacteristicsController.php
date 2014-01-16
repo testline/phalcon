@@ -61,7 +61,6 @@ class CharacteristicsController extends \Phalcon\Mvc\Controller {
     }
 
     public function saveAction() {
-        \Debug::fb($_POST);
         $updating = (bool) $_POST['_id']; $creating = !$updating;
         if ($updating) {
             $characteristic = Characteristics::findFirst((int) $_POST['_id']);

@@ -95,37 +95,6 @@
         <!--<script src="/backend/theme/js/pages/ebro_tree.js"></script>-->
 
 
-        <?/*<!--[[ page specific plugins ]]-->
-
-        <!-- peity (small charts) -->
-        <script src="/backend/theme/js/lib/peity/jquery.peity.min.js"></script>
-        <!-- vector map -->
-        <script src="/backend/theme/js/lib/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-        <script src="/backend/theme/js/lib/jvectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-        <!-- easy pie chart -->
-        <script src="/backend/theme/js/lib/easy-pie-chart/jquery.easy-pie-chart.js"></script>
-        <!-- charts -->
-        <script src="/backend/theme/js/lib/flot/jquery.flot.min.js"></script>
-        <script src="/backend/theme/js/lib/flot/jquery.flot.pie.min.js"></script>
-        <script src="/backend/theme/js/lib/flot/jquery.flot.time.min.js"></script>
-        <script src="/backend/theme/js/lib/flot/jquery.flot.tooltip.min.js"></script>
-        <script src="/backend/theme/js/lib/flot/jquery.flot.resize.js"></script>
-        <!-- video embed -->
-        <script src="/backend/theme/js/lib/FitVids/jquery.fitvids.js"></script>
-        <!-- carousel -->
-        <script src="/backend/theme/js/lib/owl-carousel/owl.carousel.min.js"></script>
-        <!-- responsive lightbox -->
-        <script src="/backend/theme/js/lib/magnific-popup/jquery.magnific-popup.min.js"></script>
-        <!-- jQueryUi -->
-        <script src="/backend/theme/js/lib/jquery_ui/jquery-ui-1.10.3.custom.min.js"></script>
-        <!-- fullcalendar -->
-        <script src="/backend/theme/js/lib/fullcalendar/fullcalendar.js"></script>
-
-        <script src="/backend/theme/js/pages/ebro_dashboard.js"></script>
-         *
-         */?>
-
-
         <!--[if lte IE 9]>
                 <script src="/backend/theme/js/ie/jquery.placeholder.js"></script>
                 <script>
@@ -159,7 +128,6 @@
     </head>
     <body class=" sidebar_hidden side_fixed">
         <div id="wrapper_all">
-            <?/*
             <header id="top_header">
                 <div class="container">
                     <div class="row">
@@ -243,9 +211,9 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="user_profile.html">Profile</a></li>
-                                    <li><a href="javascript:void(0)">Another action</a></li>
-                                    <li><a href="login_page.html">Log Out</a></li>
+<!--                                    <li><a href="user_profile.html">Profile</a></li>
+                                    <li><a href="javascript:void(0)">Another action</a></li>-->
+                                    <li><a href="/admin/login/logout">Выйти</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -264,57 +232,56 @@
                         <li>
                             <a href="#">
                                 <i class="icon-home icon-2x"></i>
-                                <span class="menu_label">Home</span>
+                                <span class="menu_label">Главная</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="icon-edit icon-2x"></i>
-                                <span class="menu_label">Content</span>
+                            <a href="#products">
+                                <i class="icon-gift icon-2x"></i>
+                                <span class="menu_label">Товары</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="icon-group icon-2x"></i>
-                                <span class="menu_label">Users</span>
+                            <a href="#categories" data-highlightOn="#characteristics">
+                                <i class="icon-sitemap icon-2x"></i>
+                                <span class="menu_label">Категории товаров</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <span class="label label-danger">12</span>
-                                <i class="icon-tasks icon-2x"></i>
-                                <span class="menu_label">Tasks</span>
+                            <a href="#brands" data-highlightOn="#brands #colors #forms #materials #measures #appliances #sets #styles #surfaces #installments">
+                                <i class="icon-puzzle-piece icon-2x"></i>
+                                <span class="menu_label">Справочники</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="icon-beaker icon-2x"></i>
-                                <span class="menu_label">Plugins</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="#">
-                                <i class="icon-book icon-2x"></i>
-                                <span class="menu_label">Help</span>
+                            <a href="#users" data-highlightOn="#users-groups #usersgroups">
+                                <i class="icon-female icon-2x"></i>
+                                <span class="menu_label">Пользователи</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#settings">
+                                <i class="icon-wrench icon-2x"></i>
+                                <span class="menu_label">Настройки</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ec">
                                 <span class="label label-success">$2 347</span>
                                 <i class="icon-tags icon-2x"></i>
                                 <span class="menu_label">E-Commerce</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="icon-wrench icon-2x"></i>
-                                <span class="menu_label">Settings</span>
+                            <a href="#tasks">
+                                <span class="label label-danger">12</span>
+                                <i class="icon-tasks icon-2x"></i>
+                                <span class="menu_label">Задания</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
-            */?>
             <?/*<!-- mobile navigation -->
             <nav id="mobile_navigation"></nav>*/?>
 

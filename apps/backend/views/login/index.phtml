@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+        <title>Авторизация</title>
+        <link rel="stylesheet" href="/backend/theme/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/backend/theme/css/todc-bootstrap.min.css">
+        <link rel="stylesheet" href="/backend/theme/css/style.css">
+        <link rel="stylesheet" href="/backend/theme/css/theme/color_1.css" id="theme">
+        <style>
+            body {padding:80px 0 0}
+            textarea, input[type="password"], input[type="text"], input[type="submit"] {-webkit-appearance: none}
+            .navbar-brand {font:300 15px/18px 'Roboto', sans-serif}
+            .login_wrapper {position:relative;width:380px;margin:0 auto}
+            .login_panel {background:#f8f8f8;padding:20px;-webkit-box-shadow: 0 0 0 4px #ededed;-moz-box-shadow: 0 0 0 4px #ededed;box-shadow: 0 0 0 4px #ededed;border:1px solid #ddd;position:relative}
+            .login_head {margin-bottom:20px}
+            .login_head h1 {margin:0;font:300 20px/24px 'Roboto', sans-serif}
+            .login_submit {padding:10px 0}
+            .login_panel label a {font-size:11px;margin-right:4px}
+
+            @media (max-width: 767px) {
+                body {padding-top:40px}
+                .navbar {display:none}
+                .login_wrapper {width:100%;padding:0 20px}
+            }
+
+            #login-error {
+                color: #cc0000;
+                margin-bottom: 18px;
+            }
+        </style>
+        <!--[if lt IE 9]>
+                <script src="/backend/theme/js/ie/html5shiv.js"></script>
+                <script src="/backend/theme/js/ie/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="login_wrapper">
+            <div class="login_panel log_section">
+                <div class="login_head">
+                    <h1>Авторизация</h1>
+                </div>
+                <? if ($loginError) { ?>
+                    <p id="login-error">Неправильная комбинация логин-пароль</p>
+                <? } ?>
+                <form action="/admin/login" id="login_form" method="post">
+                    <div class="form-group">
+                        <label for="login">Логин</label>
+                        <input type="text" id="login" name="login" class="form-control input-lg" data-required="true" data-required-message="Введите логин" value="<?= $login ?>" >
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" class="form-control input-lg" data-required="true" data-required-message="Введите пароль" value="<?= $password ?>">
+                    </div>
+                    <div class="login_submit">
+                        <button class="btn btn-primary btn-block btn-lg">Войти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="/backend/theme/js/jquery.min.js"></script>
+        <script src="/backend/theme/js/lib/parsley/parsley.min.js"></script>
+        <script>
+            $(function() {
+
+                //* validation
+                $('#login_form').parsley({
+                    errors: {
+                        classHandler: function ( elem, isRadioOrCheckbox ) {
+                            if(isRadioOrCheckbox) {
+                                return $(elem).closest('.form_sep');
+                            }
+                        },
+                        container: function (element, isRadioOrCheckbox) {
+                            if(isRadioOrCheckbox) {
+                                return element.closest('.form_sep');
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
