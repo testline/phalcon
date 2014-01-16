@@ -18,13 +18,13 @@ class Tree {
             if ($v['level'] == 0) { // Start from roots
                 $this->treeData[] = $v; // Add root to tree structure
                 unset($this->categories[$k]); // Unset parsed node for speed
-                $this->buildSubtree(&$this->treeData[sizeof($this->treeData) - 1]); // Pass link to added node
+                $this->treeData[sizeof($this->treeData) - 1]=$this->buildSubtree($this->treeData[sizeof($this->treeData) - 1]); // Pass link to added node
             } else break; // Roots are in the beginning of the array (ORDER BY level)
         }
         // Turn tree structure into required format by js plugin
         $this->treeDataJson = array();
         foreach ($this->treeData as $k => $v)
-            $this->treeDataJson[] = $this->generateJsonForSubtree(&$this->treeData[$k]);
+            $this->treeDataJson[] = $this->generateJsonForSubtree($this->treeData[$k]);
         return json_encode($this->treeDataJson);
     }
     public function buildSubtree($node) {
@@ -32,9 +32,10 @@ class Tree {
             if ($v['parent_category_id'] == $node['id']) { // If category's parent is $node, add to tree structure
                 $node['children'][] = $v;
                 unset($this->categories[$k]); // Unset parsed node for speed
-                $this->buildSubtree(&$node['children'][sizeof($node['children']) - 1]); // Build from recently added
+                $node['children'][sizeof($node['children']) - 1]=$this->buildSubtree($node['children'][sizeof($node['children']) - 1]); // Build from recently added
             }
         }
+        return $node;
     }
     public function generateJsonForSubtree($node) {
         $out->name = $node['name_ru'];
@@ -46,7 +47,7 @@ class Tree {
         // Recursively loop through children
         if ($node['children'])
             foreach ($node['children'] as $k => $v)
-                $out->children[] = $this->generateJsonForSubtree(&$node['children'][$k]);
+                $out->children[] = $this->generateJsonForSubtree($node['children'][$k]);
         return $out;
     }
 
