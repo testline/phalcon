@@ -1,0 +1,57 @@
+<style>
+    .groupRow {
+        background-color: #f9f9f9;
+    }
+</style>
+
+
+<div class="sepH_c">
+    <form _method="post" _action="/admin/categories/saveAccess/<?= $category->id ?>" id="form">
+        <table class="table table-bordered">
+            <thead>
+                <tr style="border-top: 1px solid  #ddd;">
+                    <th>Группа</th>
+                    <th>Пользователи</th>
+                    <th>Доступ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <? foreach ($usersGroups as $k => $g) { ?>
+                    <tr class="groupRow">
+                        <td><?= $g['model']->name ?></td>
+                        <td></td>
+                        <td><input type="checkbox" value="1" name="group_<?= $g['model']->id ?>" <?= $g['access'] ? "checked='true'" : '' ?>></td>
+                    </tr>
+                    <? foreach ($g['users'] as $k2 => $u) { ?>
+                        <tr>
+                            <td></td>
+                            <td><?= $u['model']->firstname ?> <?= $u['model']->lastname ?> (<?= $u['model']->login ?>)</td>
+                            <td><input type="checkbox" value="1" name="user_<?= $u['model']->id ?>" <?= $u['access'] ? "checked='true'" : '' ?>></td>
+                        </tr>
+
+                    <? } ?>
+                <? } ?>
+            </tbody>
+        </table>
+        <br>
+        <?= $this->tag->submitButton('Сохранить', 'id = "save"') ?>
+    </form>
+</div>
+
+<script type="text/javascript">
+    treeCategories.selectNode(treeCategories.getNodeByParam("url", '#categories/edit/<?= $category->id ?>', null));
+     $(document).ready(function() {
+        $('#save').click(function(event) {
+            event.preventDefault();
+            ajax({
+                url :'/admin/categories/saveAccess/<?= $category->id ?>',
+                data : $('#form').serialize(),
+                success : function(data) {
+                    locationHashChanged();
+                }
+            });
+        });
+    });
+</script>
+
+<br><br>

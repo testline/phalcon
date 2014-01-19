@@ -4,6 +4,8 @@ namespace Admin\Backend\Controllers;
 
 use Admin\Backend\Models\Products as Products;
 use Admin\Backend\Models\Categories as Categories;
+use Admin\Backend\Models\ProductsInShops as ProductsInShops;
+use Admin\Backend\Models\Shops as Shops;
 
 class ProductsController extends \Phalcon\Mvc\Controller {
 
@@ -184,6 +186,94 @@ class ProductsController extends \Phalcon\Mvc\Controller {
             $form->sendAjaxResponse();
         }
     }
+
+
+    public function shopStatusAction($productId) {
+        $product = Products::findFirst((int) $productId);
+        if (!$product)
+            die(json_encode(array('error' => 'No such product')));
+
+        $shopsModels = Shops::find();
+        foreach ($shopsModels as $k => $v)
+            $shops[$v->id] = $v->shop_name;
+
+        $productsInShops = ProductsInShops::find("products_id = $product->id");
+        if (!sizeof($productsInShops)) {
+            foreach ($shopsModels as $k => $v) {
+                $productInShops = new ProductsInShops();
+                $productInShops->save(array(
+                    'products_id' => $product->id,
+                    'shops_id' => $v->id,
+                    'price' => 0,
+                    'rebate' => 0,
+                    'available' => 0,
+                    'availability_updated_date' => '0000-00-00',
+                ));
+            }
+            $productsInShops = ProductsInShops::find("products_id = $product->id");
+        }
+
+
+        $this->view->product = $product;
+        $this->view->shopStatus = true;
+        $this->view->categoryId = $product->categories_id;
+
+        $this->view->productsInShops = $productsInShops->toArray();
+        $this->view->shops = $shops;
+        $this->view->pick("products/edit");
+    }
+
+    public function saveShopStatusAction($productId) {
+        $product = Products::findFirst((int) $productId);
+        if (!$product)
+            die(json_encode(array('error' => 'No such product')));
+
+        $shopsModels = Shops::find();
+        foreach ($shopsModels as $k => $v)
+            $shops[$v->id] = $v->shop_name;
+
+        $data = json_decode($_POST['data'], true);
+        foreach ($data as $k => $v) {
+            $id = (int) $v['id'];
+            $price = (float) $v['price'];
+            $rebate = (float) $v['rebate'];
+            $available = ((int) $v['available']) == 1 ? 1 : 0;
+            $productInShop = ProductsInShops::findFirst("id = $id AND products_id = $product->id");
+            if (!$productInShop)
+                die(json_encode(array('error' => 'No such id')));
+            $productInShop->save(array(
+                'price' => $price,
+                'rebate' => $rebate,
+                'available' => $available,
+            ));
+        }
+
+        die(json_encode(array('message' => 'Статус товара в магазинах обновлён')));
+    }
+
+    public function statusAction($productId) {
+        $product = Products::findFirst((int) $productId);
+        if (!$product)
+            die(json_encode(array('error' => 'No such product')));
+
+
+
+        $this->view->product = $product;
+        $this->view->status = true;
+        $this->view->categoryId = $product->categories_id;
+        $this->view->pick("products/edit");
+    }
+
+    public function saveStatusAction($productId) {
+        $product = Products::findFirst((int) $productId);
+        if (!$product)
+            die(json_encode(array('error' => 'No such product')));
+
+        $status = (int) $_POST['status'];
+        $product->save(array('status' => $status));
+        die(json_encode(array('message' => 'Статус товара обновлён')));
+    }
+
 
     private function getCategory($categoryId) {
         $categoryId = (int) $categoryId;

@@ -1,6 +1,24 @@
 <? ob_start(); ?>
 
-<?= $this->tag->formBlockStart($create ? 'Добавление товара' : 'Редактирование товара') ?>
+
+<?
+if ($edit) $activeTab = 1;
+if ($status) $activeTab = 2;
+if ($shopStatus) $activeTab = 3;
+if ($create)
+    $this->tag->formBlockStart($create ? 'Добавление товара' : 'Редактирование товара');
+else $this->tag->formTabbedStart(array(
+        'Редактирование товара' => "#products/edit/$product->id",
+        'Статус товара'    => "#products/status/$product->id",
+        'Статус в магазинах'    => "#products/shopStatus/$product->id",
+    ), $activeTab);
+?>
+
+
+
+
+
+<? if ($create || $edit) { ?>
 
     <?= $form->start() ?>
     <?= $form->render('code', 'Артикул') ?>
@@ -35,7 +53,29 @@
     <?= $form->showSubmitButton() ?>
     <?= $form->end() ?>
 
-<?= $this->tag->formBlockEnd() ?>
+<? } ?>
+
+
+
+<? if ($status)
+    $this->partial("products/status", array($statusValue, $product)) ?>
+
+
+
+<? if ($shopStatus)
+    $this->partial("products/shopStatus", array($productsInShops, $shops, $product)) ?>
+
+
+
+
+<? if ($create) { ?>
+    <?= $this->tag->formBlockEnd() ?>
+<? } else { ?>
+    <?= $this->tag->formTabbedEnd() ?>
+<? } ?>
+
+
+
 
 <script type="text/javascript">
     treeProducts.selectNode(treeProducts.getNodeByParam("url", '#products/index/<?= $categoryId ?>', null));

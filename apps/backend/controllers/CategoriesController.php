@@ -2,6 +2,8 @@
 
 namespace Admin\Backend\Controllers;
 use Admin\Backend\Models\Categories as Categories;
+use Admin\Backend\Models\Users as Users;
+use Admin\Backend\Models\UsersGroups as UsersGroups;
 
 class CategoriesController extends \Phalcon\Mvc\Controller {
 
@@ -153,6 +155,88 @@ class CategoriesController extends \Phalcon\Mvc\Controller {
             if (!$this->parentCategory)
                 die(json_encode(array('error' => 'No such parent category')));
         }
+    }
+
+    public function accessAction($categoryId) {
+        $category = Categories::findFirst((int) $categoryId);
+        if (!$category)
+            die(json_encode(array('error' => 'No such category')));
+        $this->view->category = $category;
+
+        $this->view->isRootCategory = $category->level == 0;
+        if ($category->level != 0)
+            die(json_encode(array('error' => 'Not a parent category')));
+
+
+        $groupAccessRaw = $this->di->get('db')->query("SELECT * FROM access_groups WHERE record_id = {$category->id} AND type = 'category'")->FetchAll();
+        foreach ($groupAccessRaw as $k => $v)
+            $groupAccess[$v['group_id']] = $v['access'];
+        $userAccessRaw = $this->di->get('db')->query("SELECT * FROM access_users WHERE record_id = {$category->id} AND type = 'category'")->FetchAll();
+        foreach ($userAccessRaw as $k => $v)
+            $userAccess[$v['user_id']] = $v['access'];
+
+        //\Debug::fb($userAccess, '$userAccess');
+
+        $usersGroupsRaw = UsersGroups::find("id != 1");
+        $usersRaw = Users::find("users_groups_id != 1");
+        foreach ($usersGroupsRaw as $k => $g) {
+            $group = array('name' => $g->name, 'access' => isset($groupAccess[$g->id]) ? $groupAccess[$g->id] : 0, 'model' => $g);
+            foreach ($usersRaw as $k2 => $u) {
+                if ($u->users_groups_id == $g->id)
+                    $group['users'][] = array('access' => isset($userAccess[$u->id]) ? $userAccess[$u->id] : 0, 'model' => $u);
+            }
+            $usersGroups[] = $group;
+        }
+        //\Debug::fb($usersGroups, '$usersGroups');
+
+        $this->view->usersGroups = $usersGroups;
+        $this->view->access = true;
+        $this->view->pick("categories/edit");
+        //$this->view->showSubcategoriesBlock = $category->level < CategoriesController::MAX_SUBCATEGORY_LEVEL;
+
+        //$this->view->parentCategory = $category->level > 0 ? Categories::findFirst($category->parent_category_id) : false;
+
+        //$this->view->create = false; $this->view->edit = true;
+    }
+
+    public function saveAccessAction($categoryId) {
+        $category = Categories::findFirst((int) $categoryId);
+        if (!$category)
+            die(json_encode(array('error' => 'No such category')));
+        $this->view->category = $category;
+
+        $this->view->isRootCategory = $category->level == 0;
+        if ($category->level != 0)
+            die(json_encode(array('error' => 'Not a parent category')));
+
+        \Debug::fb($_POST);
+
+        $usersGroupsRaw = UsersGroups::find("id != 1");
+        $usersRaw = Users::find("users_groups_id != 1");
+        foreach ($usersGroupsRaw as $k => $g)
+            $groups[] = array('group_id' => $g->id, 'type' => 'category', 'record_id' => $category->id, 'access' => isset($_POST["group_$g->id"]) ? 1 : 0);
+        foreach ($usersRaw as $k2 => $u)
+            $users[] = array('user_id' => $u->id, 'type' => 'category', 'record_id' => $category->id, 'access' => isset($_POST["user_$u->id"]) ? 1 : 0);
+        //\Debug::efb($users, '$users');
+        //$q = dbInsertQuery('access_groups', $groups, true);
+        //\Debug::efb($q, '$q');
+        $this->di->get('db')->execute("DELETE FROM access_groups WHERE record_id = $category->id");
+        $this->di->get('db')->execute("DELETE FROM access_users WHERE record_id = $category->id");
+
+        $this->di->get('db')->execute(dbInsertQuery('access_groups', $groups, true));
+        $this->di->get('db')->execute(dbInsertQuery('access_users', $users, true));
+        die(json_encode(array('message' => 'Доступ обновлён')));
+
+        //\Debug::fb($usersGroups, '$usersGroups');
+
+//        $this->view->usersGroups = $usersGroups;
+//        $this->view->access = true;
+//        $this->view->pick("categories/edit");
+        //$this->view->showSubcategoriesBlock = $category->level < CategoriesController::MAX_SUBCATEGORY_LEVEL;
+
+        //$this->view->parentCategory = $category->level > 0 ? Categories::findFirst($category->parent_category_id) : false;
+
+        //$this->view->create = false; $this->view->edit = true;
     }
 
 }

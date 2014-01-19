@@ -1,16 +1,36 @@
 <? ob_start(); ?>
 
-<?= $this->tag->formBlockStart($create ? 'Добавление категории' : 'Редактирование категории') ?>
+<?
+if ($edit) $activeTab = 1;
+if ($access) $activeTab = 2;
+if ($create || !$isRootCategory)
+    $this->tag->formBlockStart($create ? 'Добавление категории' : 'Редактирование категории');
+else $this->tag->formTabbedStart(array(
+        'Редактирование категории' => "#categories/edit/$category->id",
+        'Доступ'    => "#categories/access/$category->id"
+    ), $activeTab);
+?>
 
+
+<?//= $this->tag->formBlockStart($create ? 'Добавление категории' : 'Редактирование категории') ?>
+<? if ($create || $edit) { ?>
     <?= $form->start() ?>
     <?= $form->render('name_ru', 'Название RU') ?>
     <?= $form->render('name_ua', 'Название UA') ?>
     <?= $form->showSubmitButton() ?>
     <?= $form->end() ?>
+<? } ?>
 
-<?= $this->tag->formBlockEnd() ?>
+<?//= $this->tag->formBlockEnd() ?>
 
+<? if ($access)
+    $this->partial("categories/acccess", array($usersGroups, $category)) ?>
 
+<? if ($create) { ?>
+    <?= $this->tag->formBlockEnd() ?>
+<? } else { ?>
+    <?= $this->tag->formTabbedEnd() ?>
+<? } ?>
 
 
 <? if ($edit && $category->level == 0)
@@ -29,13 +49,20 @@
 <? } ?>
 
 
+
+
+
+
+
+
 <?
 $breadCrumbs[] = array('title'=> 'Категории товаров', 'url' => '#categories');
 if ($parentCategory)
    $breadCrumbs = array_merge($breadCrumbs, Admin\Backend\Models\Categories::getBreadCrumbs($parentCategory->id, 'For Category'));
-if ($edit)
+if ($create)
+    $breadCrumbs[] = array('title'=> 'Добавление категории', 'url' => '');
+else
     $breadCrumbs[] = array('title'=> $category->name_ru, 'url' => '');
-else $breadCrumbs[] = array('title'=> 'Добавление категории', 'url' => '');
 
 $html = ob_get_contents();
 ob_end_clean();

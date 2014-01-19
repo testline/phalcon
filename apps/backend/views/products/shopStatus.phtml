@@ -1,0 +1,211 @@
+<?
+foreach ($productsInShops as $k => $v) {
+    $data[] = array(
+        'id' => $v['id'],
+        'shop_name' => $shops[$v['shops_id']],
+        'available' => (int) $v['available'],
+        'price' => $v['price'],
+        'rebate' => $v['rebate'],
+        'availability_updated_date' => $v['availability_updated_date'] == '0000-00-00' ? '' : $v['availability_updated_date'],
+    );
+}
+?>
+
+<div class="panel panel-default">
+    <div class="slick_grid">
+        <!--            <div class="panel_controls">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Task title</label>
+                                <input type="text" id="txtSearch" class="form-control">
+                            </div>
+                            <div class="col-sm-4">
+                                <input id="pcSlider" type="text" name="range_1" value="0;100">
+                                <span class="help-block">Task completion</span>
+                            </div>
+                        </div>
+                    </div>-->
+        <div id="sg_large" style="width:100%;_height:450px;"></div>
+        <div id="pager"></div>
+    </div>
+</div>
+<br>
+<?= $this->tag->submitButton('Сохранить', 'id = "saveShopStatus"') ?>
+<br><br>
+
+<!--<script src="/backend/js/custom_slick_grid.js"></script>-->
+
+
+<style type="text/css">
+/*    .slick-cell-modified {
+        background-color: yellow;
+    }*/
+    .editable-cell {
+        cursor: pointer;
+    }
+</style>
+
+<script type="text/javascript">
+    function requiredFieldValidator(value) {
+        var valid = /^\d{0,7}(\.\d{0,2}){0,4}$/.test(value) || value == null || value == undefined || !value.length;
+        if (!valid) {
+
+        }
+        return {
+            valid: valid,
+            msg: "This is a required field"
+        };
+        if (value == null || value == undefined || !value.length) {
+            return {
+                valid: false,
+                msg: "This is a required field"
+            };
+        }
+        else {
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    }
+
+    if (grid != undefined) grid.destroy();
+    /* slick grid variables */
+    var dataView;
+    var grid;
+    var data = <?= json_encode($data) ?>;
+    var columns = [
+        {
+            id: "shop_name",
+            name: "Магазин",
+            field: "shop_name",
+            minWidth: 200,
+            resizable: false,
+        },
+        {
+            id: "available",
+            name: "Доступность",
+            maxWidth: 130,
+            cssClass: "editable-cell text-center",
+            field: "available",
+            formatter: Slick.Formatters.Checkmark,
+            editor: Slick.Editors.Checkbox,
+        },
+        {
+            id: "price",
+            name: "Цена",
+            field: "price",
+            minWidth: 100,
+            cssClass: "editable-cell",
+            editor: Slick.Editors.Text,
+            validator: requiredFieldValidator,
+        },
+        {
+            id: "rebate",
+            name: "Скидка",
+            field: "rebate",
+            minWidth: 100,
+            cssClass: "editable-cell",
+            editor: Slick.Editors.Text,
+            validator: requiredFieldValidator,
+        },
+        {
+            id: "availability_updated_date",
+            name: "Дата обновления",
+            field: "availability_updated_date",
+            minWidth: 100,
+        }
+
+    ];
+
+    var options = {
+        editable: true,
+        enableAddRow: false,
+        asyncEditorLoading: true,
+        forceFitColumns: true,
+        topPanelHeight: 30,
+        rowHeight: 38,
+        autoHeight: true,
+    };
+
+    $(function () {
+//        data = [{
+//                'id' : 10,
+//                'shop_name': '111S',
+//                'available' : 1,
+//                'price' : 12,
+//                'rebate' : '',
+//                'availability_updated_date' : '16.01.2003'
+//
+//            }, {
+//                'id' : 12,
+//                'shop_name': '222S',
+//                'available' : 0,
+//                'price' : 22222222,
+//                'rebate' : '',
+//                'availability_updated_date' : '16.01.2013'
+//            }];
+//        data = <?//= json_encode($productsInShops) ?>
+
+        dataView = new Slick.Data.DataView();
+        grid = new Slick.Grid("#sg_large", dataView, columns, options);
+        grid.setSelectionModel(new Slick.RowSelectionModel());
+
+        grid.onCellChange.subscribe(function (e, args) {
+            //                                            var modifiedCells = {};
+            //                                          if (!modifiedCells[args.row]) {
+            //                                                modifiedCells[args.row] = {};
+            //                                            }
+            //                                            modifiedCells[args.row][this.getColumns()[args.cell].id] = "slick-cell-modified";
+            //                                            console.log(modifiedCells, 'modifiedCells');
+            //                                            this.setCellCssStyles("modified", modifiedCells);
+            //dataView.updateItem(args.item.id, args.item);
+            //console.log(e);
+            //                                                alert(args);
+            //        console.log(dataView.getItems(), 'dataView');
+            //        console.log(args.grid.getData());
+            //console.log(JSON.stringify(args.grid.getData()))
+        });
+
+        grid.onBeforeEditCell.subscribe(function (e, args) {
+            if (args.column.id == 'available') { // Checkbox available
+                if (args.item.available)
+                    return false;
+                e.stopImmediatePropagation();
+            }
+        });
+
+
+
+        dataView.beginUpdate();
+        dataView.setItems(data);
+        dataView.endUpdate();
+
+        $("#gridContainer").resizable();
+
+        var cols = grid.getColumns();
+        grid.setColumns(cols);
+
+    })
+
+
+    $(document).ready(function() {
+        $('#saveShopStatus').click(function(event) {
+            var fieldsAreValid = grid.getEditController().commitCurrentEdit()
+            if (!fieldsAreValid)
+                return;
+            var data = dataView.getItems();
+            ajax({
+                url :'/admin/products/saveShopStatus/<?= $product->id ?>',
+                data : {data : JSON.stringify(data)} ,
+                success : function(data) {
+                    locationHashChanged();
+                    //                if (data.redirectHash !== undefined) {
+                    //                    if (location.hash == '#' + data.redirectHash)
+                    //                    else location.hash = data.redirectHash;
+                    //                }
+                }
+            });
+        });
+    });
+</script>

@@ -1,12 +1,12 @@
 /* [ ---- Ebro Admin - slick grid ---- ] */
 
     $(function() {
-		ebro_slick_grid.init();
+        ebro_slick_grid.init();
 	})
-	
+
 	ebro_slick_grid = {
 		init: function() {
-			if($('#sg_large').length) { 
+			if($('#sg_large').length) {
 				/* slick grid functions */
 				function requiredFieldValidator(value) {
 					if (value == null || value == undefined || !value.length) {
@@ -16,7 +16,7 @@
 					  return {valid: true, msg: null};
 					}
 				}
-				
+
 				function myFilter(item, args) {
 					if (item["percentComplete"] < args.percentCompleteThreshold) {
 						return false;
@@ -26,16 +26,16 @@
 					}
 					return true;
 				}
-				
+
 				function percentCompleteSort(a, b) {
 					return a["percentComplete"] - b["percentComplete"];
 				}
-				
+
 				function comparer(a, b) {
 					var x = a[sortcol], y = b[sortcol];
 					return (x == y ? 0 : (x > y ? 1 : -1));
 				}
-				
+
 				/* slick grid variables */
 				var dataView;
 				var grid;
@@ -50,7 +50,7 @@
 					{id: "finish", name: "Finish", field: "finish", minWidth: 100, cssClass: "text-center", editor: Slick.Editors.Date, sortable: true},
 					{id: "effort-driven", name: "Effort Driven", minWidth: 100, cssClass: "text-center cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true, sortable: true}
 				];
-				
+
 				/* slick grid options */
 				var options = {
 					editable: true,
@@ -61,12 +61,12 @@
 					topPanelHeight: 30,
 					rowHeight: 38,
 				};
-				
+
 				var sortcol = "title";
 				var sortdir = 1;
 				var percentCompleteThreshold = 0;
 				var searchString = "";
-				
+
 				$(function () {
 					// prepare the data
 					for (var i = 0; i < 100000; i++) {
@@ -81,47 +81,47 @@
 						d["finish"] = "15/09/2013";
 						d["effortDriven"] = (i % 5 == 0);
 					}
-				
+
 					dataView = new Slick.Data.DataView({ inlineFilters: true });
 					grid = new Slick.Grid("#sg_large", dataView, columns, options);
 					grid.setSelectionModel(new Slick.RowSelectionModel());
-				  
+
 					var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
 					var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-				
+
 					grid.onCellChange.subscribe(function (e, args) {
 						dataView.updateItem(args.item.id, args.item);
 					});
-				
+
 					grid.onAddNewRow.subscribe(function (e, args) {
 						var item = {"num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "11/09/2013", "finish": "01/09/2013", "effortDriven": false};
 						$.extend(item, args.item);
 						dataView.addItem(item);
 					});
-				
+
 					grid.onKeyDown.subscribe(function (e) {
 						// select all rows on ctrl-a
 						if (e.which != 65 || !e.ctrlKey) {
 						  return false;
 						}
-					
+
 						var rows = [];
 						for (var i = 0; i < dataView.getLength(); i++) {
 						  rows.push(i);
 						}
-					
+
 						grid.setSelectedRows(rows);
 						e.preventDefault();
 					});
-				
+
 					grid.onSort.subscribe(function (e, args) {
 						sortdir = args.sortAsc ? 1 : -1;
 						sortcol = args.sortCol.field;
-					
+
 						if ($.browser.msie && $.browser.version <= 8) {
 						  // using temporary Object.prototype.toString override
 						  // more limited and does lexicographic sort only by default, but can be much faster
-					
+
 							var percentCompleteValueFn = function () {
 								var val = this["percentComplete"];
 								if (val < 10) {
@@ -132,7 +132,7 @@
 									return val;
 								}
 							};
-					
+
 							// use numeric sort of % and lexicographic for everything else
 							dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
 						} else {
@@ -141,30 +141,30 @@
 							dataView.sort(comparer, args.sortAsc);
 						}
 					});
-				
+
 					// wire up model events to drive the grid
 					dataView.onRowCountChanged.subscribe(function (e, args) {
 						grid.updateRowCount();
 						grid.render();
 					});
-				  
+
 					dataView.onRowsChanged.subscribe(function (e, args) {
 						grid.invalidateRows(args.rows);
 						grid.render();
 					});
-				  
+
 					dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
 						var isLastPage = pagingInfo.pageNum == pagingInfo.totalPages - 1;
 						var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 						var options = grid.getOptions();
-					
+
 						if (options.enableAddRow != enableAddRow) {
 						  grid.setOptions({enableAddRow: enableAddRow});
 						}
 					});
-				
+
 					var h_runfilters = null;
-					
+
 					// percentage slider
 					$("#pcSlider").ionRangeSlider({
 						type: "single",
@@ -184,20 +184,20 @@
 							}
 						}
 					});
-				
+
 					// wire up the search textbox to apply the filter to the model
 					$("#txtSearch").keyup(function (e) {
 						Slick.GlobalEditorLock.cancelCurrentEdit();
-					
+
 						// clear on Esc
 						if (e.which == 27) {
 							this.value = "";
 						}
-					
+
 						searchString = this.value;
 						updateFilter();
 					});
-				
+
 					function updateFilter() {
 						dataView.setFilterArgs({
 							percentCompleteThreshold: percentCompleteThreshold,
@@ -205,7 +205,7 @@
 						});
 						dataView.refresh();
 					}
-				
+
 					// initialize the model after all the events have been hooked up
 					dataView.beginUpdate();
 					dataView.setItems(data);
@@ -215,18 +215,18 @@
 					});
 					dataView.setFilter(myFilter);
 					dataView.endUpdate();
-				
+
 					// if you don't want the items that are not visible (due to being filtered out
 					// or being on a different page) to stay selected, pass 'false' to the second arg
 					dataView.syncGridSelection(grid, true);
-				
+
 					$("#gridContainer").resizable();
-					
+
 					var cols = grid.getColumns();
 					grid.setColumns(cols);
-					
+
 				})
-				
+
 			}
 		}
 	}

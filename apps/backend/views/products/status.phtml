@@ -1,0 +1,40 @@
+<?
+$statuses = array(
+    'Новый товар',
+    'Требует изменений',
+    'Отредактирован ',
+    'Одобрен контент-супервайзером',
+    'Одобрен менеджером',
+    'Требует доработки',
+    'Готов к размещению',
+    'Размещен',
+    'Частично размещён',
+    );
+?>
+<br>
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="status">Статус</label>
+    <div class="col-sm-10">
+        <select name="status" id="status" class="form-control valid">
+            <? foreach ($statuses as $k => $v) { ?>
+                <option value="<?= $k ?>" <?= $product->status == $k ? 'selected="true"' : '' ?>><?= $v ?></option>
+            <? } ?>
+        </select>
+    </div>
+</div>
+<br><br>
+<?= $this->tag->submitButton('Сохранить', 'id = "save"') ?>
+<script type="text/javascript">
+     $(document).ready(function() {
+        $('#save').click(function(event) {
+            event.preventDefault();
+            ajax({
+                url :'/admin/products/saveStatus/<?= $product->id ?>',
+                data : {status: $('#status').val()},
+                success : function(data) {
+                    locationHashChanged();
+                }
+            });
+        });
+    });
+</script>
