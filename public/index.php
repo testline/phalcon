@@ -18,7 +18,7 @@ class Application extends \Phalcon\Mvc\Application
 	{
                 $config = new Phalcon\Config\Adapter\Ini(__DIR__ . '/../apps/config/config.ini');
 
-
+		
 		$di = new \Phalcon\DI\FactoryDefault();
 
                 $di->set('session', function() {
@@ -40,10 +40,12 @@ class Application extends \Phalcon\Mvc\Application
                                 "host" => $config->database->host,
                                 "username" => $config->database->username,
                                 "password" => $config->database->password,
-                                "dbname" => $config->database->name
+                                "dbname" => $config->database->name,
+								"options" => array(
+								  PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+								)
                         ));
                 });
-
                 $di->set('texts', function() {
                         return new \Texts();
                 });
@@ -88,7 +90,7 @@ class Application extends \Phalcon\Mvc\Application
 
 			return $router;
 		});
-                $di->getShared('db')->query('SET NAMES UTF8;')->execute();     
+		
 		$this->setDI($di);
 	}
 
