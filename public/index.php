@@ -1,11 +1,12 @@
 <?php
 
-ini_set('display_errors', true);
+ini_set('display_errors', 0);
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 ini_set('memory_limit', '128M');
 ini_set('max_execution_time', '15');
 ini_set('mbstring.internal_encoding', 'UTF-8');
 ini_set('php_value default_charset', 'utf-8');
+//ini_set("include_path", "C:/git/public/apps/backend/views/");
 
 class Application extends \Phalcon\Mvc\Application
 {
@@ -87,7 +88,7 @@ class Application extends \Phalcon\Mvc\Application
 
 			return $router;
 		});
-
+                $di->getShared('db')->query('SET NAMES UTF8;')->execute();     
 		$this->setDI($di);
 	}
 
