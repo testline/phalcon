@@ -36,8 +36,8 @@ else $this->tag->formTabbedStart(array(
     <?= $form->render('long_description', 'Описание ') ?>
 
 
-    <?= $form->render('brands_id', 'Бренды') ?>
-    <?//= $form->render('collections_id', '') ?>
+    <?= $form->render('brands_id', 'Бренд') ?>
+    <?= $form->render('collections_id', 'Коллекция') ?>
     <?= $form->render('measures_id', 'Единица измерения') ?>
     <?= $form->render('colors_id', 'Цвет') ?>
     <?= $form->render('materials_id', 'Материал') ?>
@@ -79,6 +79,33 @@ else $this->tag->formTabbedStart(array(
 
 <script type="text/javascript">
     treeProducts.selectNode(treeProducts.getNodeByParam("url", '#products/index/<?= $categoryId ?>', null));
+    $('#productForm_brands_id').change(function(event) {
+        //updateCollectionsSelect();
+        ajax({
+            url:'/admin/products/getCollectionsForBrand',
+            data : {
+                brands_id : $('#productForm_brands_id').val()
+            },
+            success : function(data) {
+                //console.log(Object.keys(data).length, 'data');
+                if (Object.keys(data).length) {
+                    $('#productForm_collections_id').attr('disabled', false);
+                    var options = '<option value="0"> </option>';
+                    for (var k in data) {
+                        var v = data[k];
+                        options += '<option value="' + k + '">' + v + '</option>';
+                    }
+                    $('#productForm_collections_id').html(options);
+                } else {
+                    $('#productForm_collections_id').html('').attr('disabled', true);
+                }
+            }
+        });
+    });
+
+//    function updateCollectionsSelect() {
+//
+//    }
 </script>
 
 

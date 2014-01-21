@@ -6,5 +6,6 @@ class Collections extends \Phalcon\Mvc\Model {
 
     public $id;
     public $name;
+    public $brands_id;
 
 }

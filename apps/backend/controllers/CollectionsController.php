@@ -1,22 +1,24 @@
 <?php
 
 namespace Admin\Backend\Controllers;
-use Admin\Backend\Models\Colors as Colors;
+use Admin\Backend\Models\Collections as Collections;
+use Admin\Backend\Models\Brands as Brands;
 
-class ColorsController extends \Phalcon\Mvc\Controller {
+class CollectionsController extends \Phalcon\Mvc\Controller {
 
      public function indexAction() {
-         $items = Colors::find();
-         $this->view->items = $items;
-         $this->view->title = 'Цвета';
-         $this->view->createButtonTitle = 'Добавть цвет';
-         $this->view->controller = 'colors';
-         $this->view->breadCrumbs = array(array('title'=> 'Цвета', 'url' => ''));
-         $this->view->pick("universal/references_index");
+//         $items = Collections::find();
+//         $this->view->items = $items;
+//         $this->view->title = 'Цвета';
+//         $this->view->createButtonTitle = 'Добавть цвет';
+//         $this->view->controller = 'collections';
+//         $this->view->breadCrumbs = array(array('title'=> 'Цвета', 'url' => ''));
+//         $this->view->pick("universal/references_index");
     }
 
-    private function initForm($item) {
-        $form = new \QForm('itemForm', '/admin/colors/save');
+    private function initForm($item, $brand = false) {
+        $form = new \QForm('itemForm', '/admin/collections/save');
+        \QFormHidden::setField($form, 'brand_id', $brand ? $brand->id : 0);
         \QFormHidden::setField($form, '_id', $item->id);
         \QFormText::setField($form, 'name', $item->name);
 
@@ -27,35 +29,44 @@ class ColorsController extends \Phalcon\Mvc\Controller {
     }
 
     public function editAction($itemId) {
-        $item = Colors::findFirst((int) $itemId);
+        $item = Collections::findFirst((int) $itemId);
         if (!$item)
             die(json_encode(array('error' => 'No such item')));
+        $brand = $this->getBrand($item->brands_id);
+
+        $this->view->brand = $brand;
+        $this->view->collection = $item;
         $this->view->form = $this->initForm($item);
         $this->view->create = false; $this->view->edit = true;
-        $this->view->title = 'Редактирование цвета';
-        $this->view->breadCrumbs = array(array('title'=> 'Цвета', 'url' => '#colors'), array('title'=> $item->name, 'url' => ''));
-        $this->view->pick("universal/references_edit");
+        $this->view->title = 'Редактирование коллекции';
     }
 
-    public function createAction() {
-        $item = new Colors();
-        $this->view->form = $this->initForm($item);
+    public function createAction($brandId) {
+        $item = new Collections();
+
+        $brand = $this->getBrand((int) $brandId);
+        $this->view->brand = $brand;
+
+        $this->view->form = $this->initForm($item, $brand);
         $this->view->create = true; $this->view->edit = false;
 
-        $this->view->title = 'Добавление цвета';
-        $this->view->breadCrumbs = array(array('title'=> 'Цвета', 'url' => '#colors'), array('title'=> $this->view->title, 'url' => ''));
+        $this->view->title = 'Добавление коллекции';
 
-        $this->view->pick("universal/references_edit");
+        $this->view->pick("collections/edit");
     }
 
     public function saveAction() {
         $updating = (bool) $_POST['_id']; $creating = !$updating;
+
+
         if ($updating) {
-            $item = Colors::findFirst((int) $_POST['_id']);
+            $item = Collections::findFirst((int) $_POST['_id']);
             if (!$item)
                 die(json_encode(array('error' => 'No such item')));
+            $brand = false;
         } else {
-            $item = new Colors();
+            $item = new Collections();
+            $brand = $this->getBrand((int) $_POST['brand_id']);
         }
         $form = $this->initForm($item);
 
@@ -68,17 +79,18 @@ class ColorsController extends \Phalcon\Mvc\Controller {
                     'name' => $vals['name'],
                 );
                 if ($creating) {
+                    $fields['brands_id'] = $brand->id;
                 }
 
                 if (!$item->save($fields))
                     die(json_encode(array('error' => 'Problem on saving')));
 
                 if ($updating) {
-                    $form->successfulSubmitAction .= "locationHashChanged();";
-                    $form->successfulSubmitAction .= "messageBoard('Цвет сохранён');";
+                    $form->successfulSubmitAction .= "location.hash = '/brands/edit/$item->brands_id';";
+                    $form->successfulSubmitAction .= "messageBoard('Коллекция сохранена');";
                 } else {
-                    $form->successfulSubmitAction .= "location.hash = 'colors';";
-                    $form->successfulSubmitAction .= "messageBoard('Цвет создан');";
+                    $form->successfulSubmitAction .= "location.hash = '/brands/edit/$brand->id';";
+                    $form->successfulSubmitAction .= "messageBoard('Коллекция создана');";
                 }
             }
             $form->sendAjaxResponse();
@@ -89,14 +101,23 @@ class ColorsController extends \Phalcon\Mvc\Controller {
         $ids = explodeAndSanitize($_POST['ids']);
         if ($ids) {
             foreach ($ids as $itemId) {
-                $item = Colors::findFirst($itemId);
+                $item = Collections::findFirst($itemId);
                 if ($item != false)
                     $item->delete();
+                $brandId = $item->brands_id;
             }
-            $out->redirectHash = 'colors';
+            $out->redirectHash = "/brands/edit/$brandId";
         } else $out->error = 'No ids';
 
         die(json_encode($out));
+    }
+
+    private function getBrand($brandId) {
+        $brandId = (int) $brandId;
+        $brand = Brands::findFirst($brandId);
+        if (!$brand)
+            die(json_encode(array('error' => 'No such brand')));
+        return $brand;
     }
 
 }

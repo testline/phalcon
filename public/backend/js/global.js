@@ -9,9 +9,9 @@ ajaxParameters = {
 function ajax(parameters) {
     var success = parameters.success;
     parameters.success = function (data) {
+        //console.log(data);
         try { data = eval('(' + data + ')'); } catch(err) { alert(data); }
         if (data.action !== undefined) {
-            console.log(data.action);
             eval(data.action);
         }
         if (data.error === undefined) {
@@ -81,16 +81,21 @@ function locationHashChanged() {
         $('a.menu_link_opened').parent().find('.menu_section_subtree, .submenu_section').slideUp();
         $('a.menu_link').removeClass('menu_link_opened');
         firstLevelNewActiveLink.addClass('menu_link_opened');
-        firstLevelNewActiveLink.parent().find('.menu_section_subtree, .submenu_section').slideDown();
+        firstLevelNewActiveLink.parent().find('.menu_section_subtree, .submenu_section').slideDown();//.css('display', 'block!important')
     }
     // Highlight second level link
     var secondLevelNewActiveLink = $('.submenu_section a[href="#' + controller + '"], .submenu_section a[data-highlightOn~="#' + controller + '"]');
     $('.submenu_section a').removeClass('active');
-    secondLevelNewActiveLink.addClass('active');
+//    $('.submenu_section').hide();//!
+    if (secondLevelNewActiveLink.length) {
+        secondLevelNewActiveLink.addClass('active');
+//        secondLevelNewActiveLink.parent().parent().css('display', 'block!important');//!
+    }
 
     // Highlight block in header
     $('#icon_nav_h li').removeClass('active');
     $('#icon_nav_h a[href="#' + controller + '"], #icon_nav_h a[data-highlightOn~="#' + controller + '"]').parent().addClass('active');
+
 
 
 

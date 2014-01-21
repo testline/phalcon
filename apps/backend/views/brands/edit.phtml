@@ -1,0 +1,31 @@
+<? ob_start(); ?>
+
+
+<?= $this->tag->formBlockStart($title) ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('name', 'Название') ?>
+    <?= $form->showSubmitButton() ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+<? $this->partial("partials/simpleTable", array(
+    'title' => 'Коллекции',
+    'controller' => 'collections',
+    'items' => $items,
+    'fields' => array(
+        'name' => 'Название',
+    ),
+)) ?>
+<?= $this->tag->addButton("#collections/create/$brand->id", 'Добавить коллекцию')  ?>
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+die(json_encode(array(
+    'html' => $html,
+    'title' => $title,
+    'breadCrumbs' => $breadCrumbs
+)));
+?>

@@ -1,0 +1,29 @@
+<? ob_start(); ?>
+
+
+<?= $this->tag->formBlockStart($title) ?>
+
+    <?= $form->start() ?>
+    <?= $form->render('name', 'Название') ?>
+    <?= $form->showSubmitButton() ?>
+    <?= $form->end() ?>
+
+<?= $this->tag->formBlockEnd() ?>
+
+
+<?
+$html = ob_get_contents();
+ob_end_clean();
+
+$breadCrumbs[] = array('title'=> 'Бренды', 'url' => '#brands');
+$breadCrumbs[] = array('title'=> $brand->name, 'url' => "#brands/edit/$brand->id");
+if ($create)
+    $breadCrumbs[] = array('title'=> 'Добавление коллекции', 'url' => '');
+else $breadCrumbs[] = array('title'=> $collection->name, 'url' => '');
+
+die(json_encode(array(
+    'html' => $html,
+    'title' => $title,
+    'breadCrumbs' => $breadCrumbs
+)));
+?>

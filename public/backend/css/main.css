@@ -85,8 +85,11 @@ color: rgba(255, 255, 255, 0.8);
 .submenu_section span a.active:after {position:absolute;right:0;top:8px;border:8px solid rgba(255,255,255,0);border-right-color:#fff;content:'';width:0;height:0}
 
 /* Hide tree and text when sidebar is closed */
-.sidebar_hidden.side_fixed ul.ztree, .sidebar_hidden.side_fixed .submenu_section { display: none!important; }
-.sidebar_hidden.side_fixed_open ul.ztree, .sidebar_hidden.side_fixed_open .submenu_section { display: block!important; }
+/*.sidebar_hidden.side_fixed ul.ztree, .sidebar_hidden.side_fixed .submenu_section { display: none; }*/
+.sidebar_hidden.side_fixed_closed ul.ztree, .sidebar_hidden.side_fixed_closed .submenu_section { display: none!important; }
+.sidebar_hidden.side_fixed_open ul.ztree, .sidebar_hidden.side_fixed_open .submenu_section { display: block; }
+
+
 .sidebar_hidden.side_fixed .menu_link { color: black; }
 .sidebar_hidden.side_fixed_open .menu_link { color: rgba(255, 255, 255, 0.6); }
 .sidebar_hidden.side_fixed .menu_link.menu_link_opened { color: #48ac2e; }

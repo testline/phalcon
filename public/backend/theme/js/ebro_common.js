@@ -217,6 +217,8 @@
 					} else if($.cookie(cookieFixedNav) != undefined) {
 						$.cookie(cookieFixedNav, 'nav_hidden');
 						$('body').removeClass('side_fixed_open')
+                                                //!
+                                                $('body').addClass('side_fixed_closed')
 					}
 				});
 
@@ -225,6 +227,7 @@
 					e.stopImmediatePropagation();
 					e.preventDefault();
 					$('body').toggleClass('side_fixed_open');
+                                        $('body').toggleClass('side_fixed_closed');
 					if( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_visible') ) {
 						$('#toogle_nav_visible').bootstrapSwitch('setState', false);
 						$.cookie(cookieFixedNav, 'nav_hidden');
@@ -234,6 +237,7 @@
 				//* load default state from cookie
 				if( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_visible' ) ) {
 					$('body').addClass('side_fixed_open');
+                                        $('body').removeClass('side_fixed_closed');
 					$('#toogle_nav_visible').bootstrapSwitch('setState', true);
 				}
 
@@ -244,20 +248,24 @@
 					$('#side_fixed_nav').lazybind('mouseenter', function(){
 						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
 							$('body').addClass('side_fixed_open');
+                                                        $('body').removeClass('side_fixed_closed');
 						}
 					}, 250, 'mouseleave');
 					$('#side_fixed_nav').lazybind('mouseleave', function(){
 						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
 							$('body').removeClass('side_fixed_open');
+                                                        $('body').addClass('side_fixed_closed');
 						}
 					}, 350, 'mouseenter');
 				} else {
 					$("#side_fixed_nav").swipe( {
 						swipeRight:function(event, direction, distance, duration, fingerCount) {
 							$('body').addClass('side_fixed_open');
+                                                         $('body').removeClass('side_fixed_closed');
 						},
 						swipeLeft:function(event, direction, distance, duration, fingerCount) {
 							$('body').removeClass('side_fixed_open');
+                                                        $('body').addClass('side_fixed_closed');
 						},
 						threshold:0
 					});

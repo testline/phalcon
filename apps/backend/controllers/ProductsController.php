@@ -6,6 +6,7 @@ use Admin\Backend\Models\Products as Products;
 use Admin\Backend\Models\Categories as Categories;
 use Admin\Backend\Models\ProductsInShops as ProductsInShops;
 use Admin\Backend\Models\Shops as Shops;
+use Admin\Backend\Models\Collections as Collections;
 
 class ProductsController extends \Phalcon\Mvc\Controller {
 
@@ -61,9 +62,13 @@ class ProductsController extends \Phalcon\Mvc\Controller {
             'installments_id',
             'sets_id',
         );
+        $selectsFilters = array(
+            'collections_id' => $product->brands_id ? "brands_id = $product->brands_id" : '0',
+        );
+
         foreach ($selects as $k => $v) {
             $selectValues = array();
-            $r = $this->di->get('db')->query("SELECT * FROM " . substr($v, 0, -3))->fetchAll();
+            $r = $this->di->get('db')->query("SELECT * FROM " . substr($v, 0, -3) . (isset($selectsFilters[$v]) ? " WHERE {$selectsFilters[$v]}" : ''))->fetchAll();
             foreach ($r as $v2)
                 $selectValues[$v2['id']] = $v2['name'];
 
@@ -72,6 +77,8 @@ class ProductsController extends \Phalcon\Mvc\Controller {
                 $form->getFieldByName($v)->selected_value = $product->{$v};
         }
 
+        if (!sizeof($form->getFieldByName('collections_id')->values))
+            $form->getFieldByName('collections_id')->disabled = true;
 
 
         $form->setFieldsRules(array(
@@ -87,8 +94,8 @@ class ProductsController extends \Phalcon\Mvc\Controller {
             'height' => '',
             'short_description' => '',
             'long_description' => '',
-            //'collections_id'  => '',
             'brands_id' => '',
+            'collections_id'  => '',
             'measures_id' => '',
             'colors_id' => '',
             'materials_id' => '',
@@ -156,8 +163,8 @@ class ProductsController extends \Phalcon\Mvc\Controller {
                     'height' => $vals['height'],
                     'short_description' => $vals['short_description'],
                     'long_description' => $vals['long_description'],
-                    //'collections_id'  => $vals['collections_id'],
                     'brands_id' => $vals['brands_id'],
+                    'collections_id'  => $vals['collections_id'],
                     'measures_id' => $vals['measures_id'],
                     'colors_id' => $vals['colors_id'],
                     'materials_id' => $vals['materials_id'],
@@ -169,8 +176,10 @@ class ProductsController extends \Phalcon\Mvc\Controller {
                     'sets_id' => $vals['sets_id'],
                 );
                 if ($creating) {
+                    $fields['status'] = 0;
                     $fields['categories_id'] = $category->id;
                 }
+                \Debug::fb($fields);
 
                 if (!$product->save($fields))
                     die(json_encode(array('error' => 'Problem on saving')));
@@ -282,5 +291,16 @@ class ProductsController extends \Phalcon\Mvc\Controller {
             die(json_encode(array('error' => 'No such category')));
         return $category;
     }
+
+    public function getCollectionsForBrandAction() {
+        $brandsId = (int) $_POST['brands_id'];
+        $collectionsRaw = Collections::find("brands_id = $brandsId");
+        $collections = array();
+        foreach ($collectionsRaw as $k => $v)
+            $collections[$v->id] = $v->name;
+        die (json_encode($collections));
+    }
+
+
 
 }
